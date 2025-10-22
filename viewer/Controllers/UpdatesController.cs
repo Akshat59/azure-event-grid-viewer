@@ -55,27 +55,13 @@ namespace viewer.Controllers
                 HttpContext.Response.Headers.Add("WebHook-Allowed-Origin", webhookRequestOrigin);
             }
 
-            if (details.EventType == "Microsoft.Communication.SMSDeliveryReportReceived")
-        {
-            var data = details.Data as JObject;
-            var messageId = data["messageId"]?.ToString();
-            var to = data["to"]?.ToString();
-            var deliveryStatus = data["deliveryStatus"]?.ToString();
-            var deliveryTimestamp = data["deliveryTimestamp"]?.ToString();
-            var deliveryTimestamp2 = data["deliveryTimestamp"]?.ToString();
-
-            // Save to Blob Storage
-            await SaveToBlobStorageAsync(details.Id.ToString(), e.ToString());
-        }
-
-
             return Ok();
         }
 
         
 private async Task SaveToBlobStorageAsync(string blobName, string content)
 {
-    var connectionString = "DefaultEndpointsProtocol=https;AccountName=gtsappeusdevops;AccountKey=NhvafFFpWlw0QCWkW9TdWehwRq/2YSqThk21sC3RsStKDGl9JHOOlJAOyTyDrEQGR1O2V8hH+AON+AStzsajJw==;EndpointSuffix=core.windows.net";
+    var connectionString = Environment.GetEnvironmentVariable("AzureBlobStorageConnectionString");
     var containerName = "sms-delivery-reports";
 
     var blobServiceClient = new BlobServiceClient(connectionString);
@@ -87,8 +73,6 @@ private async Task SaveToBlobStorageAsync(string blobName, string content)
     await blobClient.UploadAsync(stream, overwrite: true);
 }
 
-            return Ok();
-        }
 
         [HttpPost]
         public async Task<IActionResult> Post()
@@ -161,6 +145,13 @@ private async Task SaveToBlobStorageAsync(string blobName, string content)
                     details.Subject,
                     details.EventTime.ToLongTimeString(),
                     e.ToString());
+                    
+// Call SaveToBlobStorageAsync if it's a delivery report
+        if (details.EventType == "Microsoft.Communication.SMSDeliveryReportReceived")
+        {
+            await SaveToBlobStorageAsync(details.Id.ToString(), e.ToString());
+        }
+
             }
 
             return Ok();
