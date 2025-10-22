@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Mvc;
 using viewer.Hubs;
 using viewer.Models;
+using Azure.Storage.Blobs;
 
 namespace viewer.Controllers
 {
