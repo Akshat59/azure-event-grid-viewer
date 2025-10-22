@@ -75,7 +75,7 @@ namespace viewer.Controllers
         
 private async Task SaveToBlobStorageAsync(string blobName, string content)
 {
-    var connectionString = 'DefaultEndpointsProtocol=https;AccountName=gtsappeusdevops;AccountKey=NhvafFFpWlw0QCWkW9TdWehwRq/2YSqThk21sC3RsStKDGl9JHOOlJAOyTyDrEQGR1O2V8hH+AON+AStzsajJw==;EndpointSuffix=core.windows.net';
+    var connectionString = "DefaultEndpointsProtocol=https;AccountName=gtsappeusdevops;AccountKey=NhvafFFpWlw0QCWkW9TdWehwRq/2YSqThk21sC3RsStKDGl9JHOOlJAOyTyDrEQGR1O2V8hH+AON+AStzsajJw==;EndpointSuffix=core.windows.net";
     var containerName = "sms-delivery-reports";
 
     var blobServiceClient = new BlobServiceClient(connectionString);
